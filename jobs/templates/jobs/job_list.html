@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Job Portal</title>
+</head>
+<body>
+
+    {% if user.is_authenticated %}
+
+        <p>Welcome, {{ user.username }}</p>
+        <p>Role: {{ user.get_role_display }}</p>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+
+    {% else %}
+
+        <a href="{% url 'signup' %}">Sign up</a>
+        <a href="{% url 'login' %}">Login</a>
+
+    {% endif %}
+
+    <h1>Available Work</h1>
+
+    {% for job in all_jobs %}
+
+        <h2>
+            <a href="{% url 'job-details' job.pk %}">
+                {{ job.title }}
+            </a>
+        </h2>
+
+        <p>Company: {{ job.c_name }}</p>
+        <p>Location: {{ job.location }}</p>
+        <p>Salary: {{ job.salary }}</p>
+
+    {% empty %}
+
+        <p>No jobs available.</p>
+
+    {% endfor %}
+
+</body>
+</html>
